@@ -1,0 +1,38 @@
+@require: stdjabook
+@require: code
+@require: itemize
+@import: grcnum
+
+document (|
+  title = {イオニア式記数法};
+  author = {\@na4zagin3};
+  show-title = true;
+  show-toc = false;
+|) '<
+  +p {
+    この文書をコンパイルする為には、\code(`TheanoOldStyle`);\footnote{TheanoOldStyleを含むTheanoシリーズのフォントは\code(`https://github.com/akryukov/theano/releases`);にて公開されている。}という名のフォントを追加する必要がある。
+  }
+  +p {
+    一億以上の数を表す方法に標準的なものはないのだが、ここではMの数を増やす方策を採用してみた。
+  }
+  +p {
+    例示
+    \listing{
+    * 1: \grcnum(1);
+    * 2: \grcnum(2);
+    * 10: \grcnum(10);
+    * 11: \grcnum(11);
+    * 12: \grcnum(12);
+    * 123: \grcnum(123);
+    * 1234: \grcnum(1234);
+    * 12345: \grcnum(12345);
+    * 123456: \grcnum(123456);
+    * 1234567: \grcnum(1234567);
+    * 12345678: \grcnum(12345678);
+    * 123456789: \grcnum(123456789);
+    * 1234567890: \grcnum(1234567890);
+    * 12345678901: \grcnum(12345678901);
+    * 123456789012: \grcnum(123456789012);
+    }
+  }
+>

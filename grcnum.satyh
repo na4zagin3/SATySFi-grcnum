@@ -1,0 +1,162 @@
+@require: list
+@require: option
+
+module Grcnum : sig
+  direct \grcnum : [int] inline-cmd
+  direct \greek : [inline-text] inline-cmd
+end = struct
+  let s-kelaia = `ʹ`
+  let s-gnls = `͵`
+  let ones = [` `; `α`; `β`; `γ`; `δ`; `ε`; `ϛ`; `ζ`; `η`; `θ`]
+  let tens = [` `; `ι`; `κ`; `λ`; `μ`; `ν`; `ξ`; `ο`; `π`; `ϟ`]
+  let hundreds = [` `; `ρ`; `σ`; `τ`; `υ`; `φ`; `χ`; `ψ`; `ω`; `ϡ`]
+
+  let apply-non-empty f s = match s with
+    | ` ` -> s
+    | s -> f s
+
+  let thousands = List.map (apply-non-empty (fun s -> s-gnls ^ s)) ones
+
+  % let s-kelaia = `'`
+  % let s-gnls = `.`
+  % let debug-nums = [` `; `1`; `2`; `3`; `4`; `5`; `6`; `7`; `8`; `9`]
+  % let ones = List.map (apply-non-empty (fun s -> `a` ^ s)) debug-nums
+  % let tens = List.map (apply-non-empty (fun s -> `b` ^ s)) debug-nums
+  % let hundreds = List.map (apply-non-empty (fun s -> `c` ^ s)) debug-nums
+  % let thousands = List.map (apply-non-empty (fun s -> `d` ^ s)) debug-nums
+
+
+
+  let number-symbols = [ones; tens; hundreds; thousands]
+
+  let explode-into-digits : int -> int list | n =
+    let-rec sub
+      | acc n = if n >= 10 then sub ((n mod 10) :: acc) (n / 10) else n::acc
+    in
+    sub [] n
+
+  let-rec zip : 'a list -> 'b list -> ('a * 'b) list
+    | (x :: xs) (y :: ys) = (x, y) :: (zip xs ys)
+    | _ _ = []
+
+  let split-by : int -> 'a list -> 'a list list | n =
+    let-rec sub
+      | xss xs _ [] = List.reverse ((List.reverse xs) :: xss)
+      | xss xs 0 ys = sub ((List.reverse xs) :: xss) [] n ys
+      | xss xs n (y :: ys) = sub xss (y :: xs) (n - 1) ys
+    in
+    sub [] [] n
+
+  % takes rev digits
+  let simple-digits : int list -> string | rds =
+    let symbol-digits = List.reverse (zip rds number-symbols) in
+    List.fold-left (^) ` ` (List.map (fun (d, ss) -> List.nth d ss |> Option.from `!`) symbol-digits)
+
+  let-rec render-myriad
+    | 0 m = m
+    | _ ` ` = ` `
+    | _ m = m ^ `Μ`
+
+  % takes rev digits
+  let string-aristarchos rds =
+    let ms = List.map simple-digits (split-by 4 rds) in
+    List.fold-left (^) ` ` (List.reverse (List.mapi render-myriad ms))
+
+  let-inline \show-int n = embed-string (arabic n)
+  let-inline \show-string s = embed-string s
+  let-inline \show-inline-text s = s
+
+  let repeat n xs =
+    let-rec sub
+    | 0 acc = acc
+    | n acc = sub (n - 1) (xs :: acc)
+    in
+      List.concat (sub n [])
+
+  let repeat-string n str =
+    List.fold-left (^) ` ` (repeat n [str])
+
+  let max-length l1 l2 =
+    if l1 >' l2
+    then l1
+    else l2
+
+  let llap b =
+    let (l, _, _) = get-natural-metrics b in
+    b ++ kern (0pt -' l)
+
+  let overhang b1 b2 =
+    let (l1, _, _) = get-natural-metrics b1 in
+    let (l2, _, _) = get-natural-metrics b2 in
+    let total-length = max-length l1 l2 in
+    let side-kern1 = inline-skip ((total-length -' l1) *' 0.5) in
+    let side-kern2 = inline-skip ((total-length -' l2) *' 0.5) in
+    let bs = line-stack-bottom [side-kern1 ++ b1; side-kern2 ++ b2] in
+    script-guard Latin (no-break bs)
+
+  let-inline \myriad-symbol = embed-string `Μ`
+
+  let-inline ctx \stack-myriad n str =
+    let size = get-font-size ctx in
+    let inter-space = inline-skip (size *' 0.1) in
+    let ctx-coeff =
+      ctx |> set-font-size (size *' 0.5)
+          |> set-manual-rising  (size *' 0.2)
+    in
+    let myriad-symbol = embed-string (repeat-string n `Μ`) in
+    let myriads-ib = read-inline ctx myriad-symbol in
+    let coeffs-ib = read-inline ctx-coeff (embed-string str) in
+    let (_, coeffs-ht, _) = get-natural-metrics coeffs-ib in
+    overhang coeffs-ib myriads-ib
+
+  let-rec render-myriad-it
+    | 0 m = Some (embed-string m)
+    | _ ` ` = None
+    | n m =
+    Some {\stack-myriad(n)(m);}
+
+  let concat-maybe =
+    let-rec sub
+    | acc [] = List.reverse acc
+    | acc ((None) :: xs) = sub acc xs
+    | acc ((Some x) :: xs) = sub (x :: acc) xs
+    in
+      sub []
+
+  let intercalate c =
+    let-rec sub
+    | [] = []
+    | (x :: []) = [x]
+    | (x :: xs) = x :: c :: sub xs
+    in
+      sub
+
+  let-inline ctx \inline-skip-em s =
+    let size = get-font-size ctx in
+    inline-skip (size *' s)
+
+  let it-aristarchos rds =
+    let ms = List.map simple-digits (split-by 4 rds) in
+    let myriads = List.reverse (List.mapi render-myriad-it ms) in
+    let myriads = concat-maybe myriads in
+    let inter-myriad = {\inline-skip-em(0.2);} in
+    let number-symbol = embed-string s-kelaia in
+    let myriads = List.append (intercalate inter-myriad myriads) [number-symbol] in
+    List.fold-left (fun x y -> {\show-inline-text(x);\show-inline-text(y);}) {} myriads
+
+  let-inline ctx \greek it =
+    let ctx =
+      ctx |> set-font Latin (`TheanoOldStyle`, 1., 0.)
+          |> set-font OtherScript (`TheanoOldStyle`, 1., 0.)
+    in
+    read-inline ctx it
+
+  let-inline \grcnum n =
+    let ds = explode-into-digits n in
+    let dss = split-by 4 ds in
+    let rds = List.reverse ds in
+    let c-dss = List.fold-left (^) ` ` (List.map arabic (List.fold-left List.append [] dss)) in
+    let nu = simple-digits rds in
+    let sa = string-aristarchos rds in
+    {\greek{\show-inline-text(it-aristarchos rds);}}
+end
