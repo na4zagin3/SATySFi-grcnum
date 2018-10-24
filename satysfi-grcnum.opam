@@ -1,0 +1,27 @@
+opam-version: "2.0"
+name: "satysfi-grcnum"
+version: "0.1"
+synopsis: "SATySFi Package for Greek Numeral System"
+description: """
+A SATySFi Package for Greek Numeral System.
+
+this requires Satyrographos to install. See https://github.com/na4zagin3/satyrographos.
+"""
+maintainer: "SAKAMOTO Noriaki <mrty.ityt.pt@gmail.com>"
+authors: "SAKAMOTO Noriaki <mrty.ityt.pt@gmail.com>"
+license: "GPL-3.0"
+homepage: "https://github.com/na4zagin3/satyrographos"
+bug-reports: "https://github.com/na4zagin3/satyrographos/issues"
+dev-repo: "git+https://github.com/na4zagin3/SATySFi-grcnum.git"
+depends: [
+  "satysfi" {= "0.0.3"}
+  "satysfi-fonts-theano"
+  "satyrographos" {>= "0.0.1" & < "0.0.2"}
+]
+build: [ ]
+install: [
+  [make "-f" "Makefile" "install" "PREFIX=%{prefix}%"]
+]
+remove: [
+  [make "-f" "Makefile" "uninstall" "PREFIX=%{prefix}%"]
+]
