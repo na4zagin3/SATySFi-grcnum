@@ -113,7 +113,7 @@ end = struct
     in
       sub []
 
-  let intercalate c =
+  let intersperse c =
     let-rec sub
     | [] = []
     | (x :: []) = [x]
@@ -131,7 +131,7 @@ end = struct
     let myriads = concat-maybe myriads in
     let inter-myriad = {\inline-skip-em(0.2);} in
     let number-symbol = embed-string s-keraia in
-    let myriads = List.append (intercalate inter-myriad myriads) [number-symbol] in
+    let myriads = List.append (intersperse inter-myriad myriads) [number-symbol] in
     List.fold-left (fun x y -> {\show-inline-text(x);\show-inline-text(y);}) {} myriads
 
   let-inline ctx \greek it =
