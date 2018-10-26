@@ -5,7 +5,7 @@ module Grcnum : sig
   direct \grcnum : [int] inline-cmd
   direct \greek : [inline-text] inline-cmd
 end = struct
-  let s-kelaia = `ʹ`
+  let s-keraia = `ʹ`
   let s-gnls = `͵`
   let ones = [` `; `α`; `β`; `γ`; `δ`; `ε`; `ϛ`; `ζ`; `η`; `θ`]
   let tens = [` `; `ι`; `κ`; `λ`; `μ`; `ν`; `ξ`; `ο`; `π`; `ϟ`]
@@ -16,16 +16,6 @@ end = struct
     | s -> f s
 
   let thousands = List.map (apply-non-empty (fun s -> s-gnls ^ s)) ones
-
-  % let s-kelaia = `'`
-  % let s-gnls = `.`
-  % let debug-nums = [` `; `1`; `2`; `3`; `4`; `5`; `6`; `7`; `8`; `9`]
-  % let ones = List.map (apply-non-empty (fun s -> `a` ^ s)) debug-nums
-  % let tens = List.map (apply-non-empty (fun s -> `b` ^ s)) debug-nums
-  % let hundreds = List.map (apply-non-empty (fun s -> `c` ^ s)) debug-nums
-  % let thousands = List.map (apply-non-empty (fun s -> `d` ^ s)) debug-nums
-
-
 
   let number-symbols = [ones; tens; hundreds; thousands]
 
@@ -140,7 +130,7 @@ end = struct
     let myriads = List.reverse (List.mapi render-myriad-it ms) in
     let myriads = concat-maybe myriads in
     let inter-myriad = {\inline-skip-em(0.2);} in
-    let number-symbol = embed-string s-kelaia in
+    let number-symbol = embed-string s-keraia in
     let myriads = List.append (intercalate inter-myriad myriads) [number-symbol] in
     List.fold-left (fun x y -> {\show-inline-text(x);\show-inline-text(y);}) {} myriads
 
