@@ -1,7 +1,7 @@
 @require: stdjabook
 @require: code
 @require: itemize
-@import: grcnum
+@require: grcnum/grcnum
 
 document (|
   title = {イオニア式記数法};
@@ -10,7 +10,7 @@ document (|
   show-toc = false;
 |) '<
   +p {
-    この文書をコンパイルする為には、\code(`TheanoOldStyle`);\footnote{TheanoOldStyleを含むTheanoシリーズのフォントは\code(`https://github.com/akryukov/theano/releases`);にて公開されている。}という名のフォントを追加する必要がある。
+    この文書をコンパイルする為には、\code(`fonts-theano:TheanoOldStyle`);\footnote{TheanoOldStyleを含むTheanoシリーズのフォントは\code(`https://github.com/akryukov/theano/releases`);にて公開されている。}という名のフォントを追加する必要がある。
   }
   +p {
     一億以上の数を表す方法に標準的なものはないのだが、ここではMの数を増やす方策を採用してみた。

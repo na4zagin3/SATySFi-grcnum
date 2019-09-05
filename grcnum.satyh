@@ -136,8 +136,8 @@ end = struct
 
   let-inline ctx \greek it =
     let ctx =
-      ctx |> set-font Latin (`TheanoOldStyle`, 1., 0.)
-          |> set-font OtherScript (`TheanoOldStyle`, 1., 0.)
+      ctx |> set-font Latin (`fonts-theano:TheanoOldStyle`, 1., 0.)
+          |> set-font OtherScript (`fonts-theano:TheanoOldStyle`, 1., 0.)
     in
     read-inline ctx it
 
