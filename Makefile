@@ -1,22 +1,9 @@
-PREFIX=/usr/local
-LIBDIR=$(PREFIX)/share/satysfi
-PACKAGE_NAME=satysfi-grcnum
-PACKAGE_DIR=$(LIBDIR)/$(PACKAGE_NAME)
+PACKAGE_NAME=grcnum
 
-.PHONY: all
-.PHONY: doc install uninstall
-
-all:
-	:
+.PHONY: doc
 
 doc: doc-grcnum.pdf
 
-%.pdf: %.saty grcnum.satyh
-	satysfi $<
-
-install:
-	install -d "$(PACKAGE_DIR)/packages"
-	install -m 644 *.satyh $(PACKAGE_DIR)/packages
-
-uninstall:
-	rm -rf "$(PACKAGE_DIR)"
+doc-grcnum.pdf: doc-$(PACKAGE_NAME).saty satysfi-$(PACKAGE_NAME).opam grcnum.satyh Satyristes
+	opam pin add satysfi-$(PACKAGE_NAME).opam "file://$(PWD)" -y
+	satyrographos opam build -name $(PACKAGE_NAME)-doc
