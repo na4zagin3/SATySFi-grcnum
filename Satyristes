@@ -1,0 +1,19 @@
+(version "0.0.2")
+(library
+  (name "grcnum")
+  (version "0.2")
+  (sources
+    ((package "grcnum.satyh" "./grcnum.satyh")))
+  (opam "satysfi-grcnum.opam")
+  (dependencies ((fonts-theano ())))
+  (compatibility ((satyrographos 0.0.1))))
+(libraryDoc
+  (name "grcnum-doc")
+  (version "0.2")
+  (build
+    ((satysfi "doc-grcnum.saty" "-o" "doc-grcnum-ja.pdf")))
+  (sources
+    ((doc "doc-grcnum-ja.pdf" "./doc-grcnum-ja.pdf")))
+  (opam "satysfi-grcnum-doc.opam")
+  (dependencies ((grcnum ())
+                 (fonts-theano ()))))

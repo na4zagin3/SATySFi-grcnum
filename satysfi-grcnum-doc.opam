@@ -1,9 +1,9 @@
 opam-version: "2.0"
-name: "satysfi-grcnum"
+name: "satysfi-grcnum-doc"
 version: "0.2"
-synopsis: "SATySFi Package for Greek Numeral System"
+synopsis: "Documentation of SATySFi Package for Greek Numeral System"
 description: """
-A SATySFi Package for Greek Numeral System.
+Documentation of satysfi-grcnum -- A SATySFi Package for Greek Numeral System.
 
 this requires Satyrographos to install. See https://github.com/na4zagin3/satyrographos.
 """
@@ -15,19 +15,26 @@ bug-reports: "https://github.com/na4zagin3/satyrographos/issues"
 dev-repo: "git+https://github.com/na4zagin3/SATySFi-grcnum.git"
 depends: [
   "satysfi" {>= "0.0.3" & < "0.0.4"}
-  "satysfi-fonts-theano" {>= "2.0+satysfi0.0.3+satyrograhos0.0.2"}
   "satyrographos" {>= "0.0.1" & < "0.0.3"}
+  "satysfi-fonts-theano" {>= "2.0+satysfi0.0.3+satyrograhos0.0.2"}
+  "satysfi-lib-dist"
+  "satysfi-grcnum" {= "0.2"}
 ]
-build: [ ]
+build: [
+  ["satyrographos" "opam" "build"
+   "-name" "grcnum-doc"
+   "-prefix" "%{prefix}%"
+   "-script" "%{build}%/Satyristes"]
+]
 install: [
   ["satyrographos" "opam" "install"
-   "-name" "grcnum"
+   "-name" "grcnum-doc"
    "-prefix" "%{prefix}%"
    "-script" "%{build}%/Satyristes"]
 ]
 remove: [
   ["satyrographos" "opam" "uninstall"
-   "-name" "grcnum"
+   "-name" "grcnum-doc"
    "-prefix" "%{prefix}%"
    "-script" "%{build}%/Satyristes"]
 ]
