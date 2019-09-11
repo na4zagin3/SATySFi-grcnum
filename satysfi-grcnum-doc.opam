@@ -9,7 +9,7 @@ this requires Satyrographos to install. See https://github.com/na4zagin3/satyrog
 """
 maintainer: "SAKAMOTO Noriaki <mrty.ityt.pt@gmail.com>"
 authors: "SAKAMOTO Noriaki <mrty.ityt.pt@gmail.com>"
-license: "GPL-3.0"
+license: "MIT"
 homepage: "https://github.com/na4zagin3/satyrographos"
 bug-reports: "https://github.com/na4zagin3/satyrographos/issues"
 dev-repo: "git+https://github.com/na4zagin3/SATySFi-grcnum.git"
